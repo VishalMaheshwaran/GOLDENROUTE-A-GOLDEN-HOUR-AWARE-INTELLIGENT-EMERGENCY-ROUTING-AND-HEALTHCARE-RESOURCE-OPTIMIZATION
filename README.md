@@ -37,12 +37,13 @@ All pre-seeded test accounts use the password: **`123`**
 3. [Architecture & Project Structure](#architecture--project-structure)
 4. [Data Models](#data-models)
 5. [User Roles & Dashboards](#user-roles--dashboards)
-6. [Core Features](#core-features)
-7. [Hospital Scoring Algorithm](#hospital-scoring-algorithm)
-8. [API Integrations](#api-integrations)
-9. [URL Routes](#url-routes)
-10. [How to Run Locally](#how-to-run-locally)
-11. [Vercel Deployment Guide](#vercel-deployment-guide)
+6. [How to View & Test Navigation Routes](#-how-to-view--test-navigation-routes)
+7. [Core Features](#core-features)
+8. [Hospital Scoring Algorithm](#hospital-scoring-algorithm)
+9. [API Integrations](#api-integrations)
+10. [URL Routes](#url-routes)
+11. [How to Run Locally](#how-to-run-locally)
+12. [Vercel Deployment Guide](#vercel-deployment-guide)
 
 ---
 
@@ -210,6 +211,28 @@ GoldenRoute provides 3 distinct user roles with automated role-based routing upo
 ### 👤 Citizen
 - Registers an account and maintains emergency health details (Aadhaar, blood group, medical history).
 - Triggers a GPS-based Distress Signal that auto-dispatches to the closest active ambulance.
+
+---
+
+## 🗺️ How to View & Test Navigation Routes
+
+The navigation and live route features are integrated into the **Ambulance Dashboard**:
+
+### 1. Hospital Recommendation & Live Route Mapping
+1. Log in at [`/login/`](https://golden--routee.vercel.app/login/) with **`driver1`** / **`123`**.
+2. Under **Find Hospital for Patient**:
+   - **Patient Type**: Choose `Cardiac`, `Neuro`, or `Trauma`.
+   - **Accident Latitude**: `12.9715` *(Sample Chennai coordinate)*
+   - **Accident Longitude**: `80.2500`
+3. Click **🔎 Find Hospitals**.
+4. The system calculates the best-suited hospital, computes real-time driving times, and provides:
+   - 🗺️ **Embedded Google Map**: Shows the destination hospital's location.
+   - 🧭 **Open Route in Google Maps** button: Opens live, turn-by-turn Google Maps driving navigation from the accident scene to the hospital.
+
+### 2. Citizen SOS Distress Route
+1. Log in as a citizen (**`batman`** / **`123`**) and click **Send Distress Signal** with coordinates.
+2. Log into the ambulance dashboard (**`driver1`** / **`123`**).
+3. Under **🚨 Distress Signals**, click **🚑 Navigate to Citizen** to open turn-by-turn navigation directly to the citizen's exact GPS location.
 
 ---
 
