@@ -1,67 +1,118 @@
 # 🚑 GOLDENROUTE: A GOLDEN HOUR-AWARE INTELLIGENT EMERGENCY ROUTING AND HEALTHCARE RESOURCE OPTIMIZATION
 
-GoldenRoute is a Django-based emergency healthcare dispatch and routing web application. 
-It intelligently routes ambulances to the best available hospital in real time, taking into account ER availability, ICU beds, required specialist presence,
-and live travel time via the OpenRouteService API. The platform also allows citizens to send distress signals that are automatically dispatched 
-to the nearest ambulance.
+GoldenRoute is a Django-based emergency healthcare dispatch and intelligent hospital routing system. 
+It optimizes the critical "Golden Hour" in emergency medical care by routing ambulances to the best-equipped hospital in real time based on ER room availability, ICU beds, required specialist availability, and live travel time via the OpenRouteService API.
 
 ---
 
 ## 🌐 Live Production Deployment
 
-- **Live Web App:** [https://golden--routee.vercel.app/](https://golden--routee.vercel.app/)
-- **Admin Panel:** [https://golden--routee.vercel.app/admin/](https://golden--routee.vercel.app/admin/)
+- **Main Web Application:** [https://golden--routee.vercel.app/](https://golden--routee.vercel.app/)
+- **Django Admin Control Panel:** [https://golden--routee.vercel.app/admin/](https://golden--routee.vercel.app/admin/)
 
 ---
 
-## 🔑 Pre-Configured Demo Credentials
+## 👥 User Roles, Credentials & Direct URLs
 
-All pre-seeded test accounts use the password: **`123`**
-
-| Role | Username | Password | Login URL | Access Scope / Target |
-|---|---|---|---|---|
-| 🏥 **Hospital** | `apollo_hospital` | `123` | [`/login/`](https://golden--routee.vercel.app/login/) | Hospital Dashboard (ER rooms, ICU beds, incoming transfers) |
-| 🏥 **Hospital** | `city_hospital` | `123` | [`/login/`](https://golden--routee.vercel.app/login/) | Hospital Dashboard (ER rooms, ICU beds, incoming transfers) |
-| 🚑 **Ambulance** | `driver1` | `123` | [`/login/`](https://golden--routee.vercel.app/login/) | Ambulance Dashboard (GPS location, find hospital, distress SOS) |
-| 🚑 **Ambulance** | `driver2` | `123` | [`/login/`](https://golden--routee.vercel.app/login/) | Ambulance Dashboard (GPS location, find hospital, distress SOS) |
-| 👤 **Citizen** | `batman` | `123` | [`/login/`](https://golden--routee.vercel.app/login/) | Citizen Dashboard (Health profile, emergency contact, SOS trigger) |
-| 👤 **New Citizen** | Self-signup | Your password | [`/citizen-signup/`](https://golden--routee.vercel.app/citizen-signup/) | Citizen Self-Registration |
-| 🛠️ **Admin** | `admin` | `123` | [`/admin/`](https://golden--routee.vercel.app/admin/) | Full Django Admin Control Panel |
+Each role in GoldenRoute has a dedicated dashboard, direct access URL, and specific capabilities.
 
 ---
 
-## Table of Contents
+### 🏥 1. Hospital Role
 
-1. [Project Overview](#project-overview)
-2. [Tech Stack](#tech-stack)
-3. [Architecture & Project Structure](#architecture--project-structure)
-4. [Data Models](#data-models)
-5. [User Roles & Dashboards](#user-roles--dashboards)
-6. [How to View & Test Navigation Routes](#-how-to-view--test-navigation-routes)
-7. [Core Features](#core-features)
-8. [Hospital Scoring Algorithm](#hospital-scoring-algorithm)
-9. [API Integrations](#api-integrations)
-10. [URL Routes](#url-routes)
-11. [How to Run Locally](#how-to-run-locally)
-12. [Vercel Deployment Guide](#vercel-deployment-guide)
+Hospitals manage their real-time emergency capacity and receive pre-arrival patient alerts.
 
----
-
-## Project Overview
-
-GoldenRoute solves a critical problem in emergency healthcare: **which hospital should an ambulance go to?**
-
-When an ambulance responds to an emergency, the driver needs to quickly decide which hospital is best — not just the closest, but the one that has:
-- Available ER rooms and ICU beds
-- The right specialist on duty (cardiologist, neurosurgeon, trauma team)
-- The shortest real-world travel time
-
-GoldenRoute automates this decision with a weighted scoring algorithm and live routing data. It also enables citizens 
-to trigger a distress signal from their dashboard, which gets routed to the nearest available ambulance.
+- **Direct Dashboard URL:** [https://golden--routee.vercel.app/hospital/](https://golden--routee.vercel.app/hospital/)
+- **Login URL:** [https://golden--routee.vercel.app/login/](https://golden--routee.vercel.app/login/)
+- **Demo Credentials:**
+  - **Hospital 1 (Apollo):** Username: `apollo_hospital` | Password: `123`
+  - **Hospital 2 (City Hospital):** Username: `city_hospital` | Password: `123`
+- **Capabilities & Features:**
+  - Update live count of free **ER Rooms** and **ICU Beds**.
+  - Toggle on-duty specialist flags (**Cardiologist**, **Neurosurgeon**, **Trauma Team**).
+  - View real-time incoming **Patient Transfers** with patient medical summary (blood group, age, pre-existing conditions) and arrival ETA.
 
 ---
 
-## Tech Stack
+### 🚑 2. Ambulance Driver Role
+
+Ambulance drivers calculate optimal hospital destinations, view route maps, and respond to SOS calls.
+
+- **Direct Dashboard URL:** [https://golden--routee.vercel.app/ambulance/](https://golden--routee.vercel.app/ambulance/)
+- **Login URL:** [https://golden--routee.vercel.app/login/](https://golden--routee.vercel.app/login/)
+- **Demo Credentials:**
+  - **Ambulance 1:** Username: `driver1` | Password: `123`
+  - **Ambulance 2:** Username: `driver2` | Password: `123`
+  - **Ambulance 3:** Username: `driver3` | Password: `123`
+- **Capabilities & Features:**
+  - **Update GPS Location:** Broadcast current ambulance coordinates.
+  - **Smart Hospital Routing:** Input patient emergency type (`Cardiac`, `Neuro`, `Trauma`) and accident coordinates (e.g. `12.9715`, `80.2500`) to find the best hospital.
+  - **🗺️ Interactive Map & Navigation:** View embedded Google Map of the destination hospital and launch **Google Maps turn-by-turn navigation**.
+  - **Patient Confirmation:** Confirm transport with patient's Aadhaar to notify the receiving hospital.
+  - **🚨 Distress Signals:** View nearby citizen SOS signals with one-click **"🚑 Navigate to Citizen"** GPS routing.
+
+---
+
+### 👤 3. Citizen Role
+
+Citizens register their emergency medical profiles and broadcast instant distress SOS signals.
+
+- **Direct Dashboard URL:** [https://golden--routee.vercel.app/citizen/](https://golden--routee.vercel.app/citizen/)
+- **Signup URL:** [https://golden--routee.vercel.app/citizen-signup/](https://golden--routee.vercel.app/citizen-signup/)
+- **Edit Profile URL:** [https://golden--routee.vercel.app/edit-profile/](https://golden--routee.vercel.app/edit-profile/)
+- **Login URL:** [https://golden--routee.vercel.app/login/](https://golden--routee.vercel.app/login/)
+- **Demo Credentials:**
+  - **Pre-existing Citizen:** Username: `batman` | Password: `123`
+  - **Self-Registration:** Sign up at `/citizen-signup/` with any unique username and password.
+- **Capabilities & Features:**
+  - Store emergency health data (Aadhaar number, Blood group, Diabetes, Heart disease, Emergency contact).
+  - Trigger a 1-click **Distress SOS Signal** with GPS location that auto-dispatches to the nearest active ambulance.
+
+---
+
+### 🛠️ 4. Admin / Superuser Role
+
+System administrators manage all database tables, users, and hospital records.
+
+- **Direct Admin URL:** [https://golden--routee.vercel.app/admin/](https://golden--routee.vercel.app/admin/)
+- **Credentials:**
+  - Username: `admin` | Password: `123`
+- **Capabilities & Features:**
+  - Full CRUD access to `User`, `UserProfile`, `Hospital`, `EmergencyCase`, `HealthProfile`, `PatientTransfer`, and `DistressSignal` models.
+
+---
+
+## 🗺️ How to Test Route Navigation Step-by-Step
+
+### 1. Test Hospital Route & Turn-by-Turn Navigation
+1. Open [`https://golden--routee.vercel.app/login/`](https://golden--routee.vercel.app/login/)
+2. Log in with **`driver1`** / **`123`**.
+3. Under **Find Hospital for Patient**:
+   - **Patient Type:** Select `Cardiac`
+   - **Accident Latitude:** `12.9715`
+   - **Accident Longitude:** `80.2500`
+4. Click **`🔎 Find Hospitals`**.
+5. View the **⭐ Recommended Hospital** section:
+   - 🗺️ **Embedded Google Map** displays the hospital location.
+   - 🧭 Click **"Open Route in Google Maps"** to open live turn-by-turn driving directions from accident to hospital.
+
+### 2. Test Citizen SOS to Ambulance Dispatch Route
+1. Log into [`https://golden--routee.vercel.app/login/`](https://golden--routee.vercel.app/login/) as Citizen (**`batman`** / **`123`**).
+2. Click **Send Distress Signal** with coordinates (e.g. `12.9650`, `80.2480`).
+3. Log in as Ambulance (**`driver1`** / **`123`**).
+4. Under **🚨 Distress Signals**, click **`🚑 Navigate to Citizen`** to launch Google Maps routing directly to the citizen's coordinates.
+
+---
+
+## 📐 Hospital Scoring Algorithm
+
+Implemented in `core/utils.py → calculate_hospital_score()`:
+
+$$\text{Score} = (\text{ER rooms} \times 3) + (\text{ICU beds} \times 2) + (\text{Specialist Match} \ ? \ +20 : -20) - (\text{Travel Time in mins} \times 1.5)$$
+
+---
+
+## 💻 Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -71,13 +122,12 @@ to trigger a distress signal from their dashboard, which gets routed to the near
 | Database | SQLite3 (configured for `/tmp` writable storage on Vercel) |
 | Routing API | OpenRouteService API v2 |
 | Navigation | Google Maps (deep-link integration) |
-| Templating | Django Templates (server-side HTML) |
 | Deployment | Vercel Serverless Functions (`@vercel/python`) |
 | Language | Python 3.11 / 3.12 |
 
 ---
 
-## Architecture & Project Structure
+## 📂 Architecture & Project Structure
 
 ```
 goldenroute/                        ← Root Django project folder
@@ -118,187 +168,22 @@ goldenroute/                        ← Root Django project folder
 
 ---
 
-## Data Models
+## 🚀 How to Run Locally
 
-### `UserProfile`
-Extends Django's built-in `User` model with a role and real-time GPS location.
-
-| Field | Type | Description |
-|---|---|---|
-| `user` | OneToOneField (User) | Link to Django auth user |
-| `role` | CharField | One of: `ambulance`, `hospital`, `citizen` |
-| `latitude` / `longitude` | FloatField | Current GPS coordinates |
-| `location_updated_at` | DateTimeField | Timestamp of last location update |
-
----
-
-### `Hospital`
-Represents a medical facility and its live resource availability.
-
-| Field | Type | Description |
-|---|---|---|
-| `user` | OneToOneField (User) | Linked hospital user account |
-| `name` | CharField | Hospital name |
-| `latitude` / `longitude` | FloatField | Facility GPS location |
-| `er_rooms_available` | IntegerField | Free emergency room count |
-| `icu_beds_available` | IntegerField | Free ICU bed count |
-| `has_cardiologist` | BooleanField | Specialist on duty flag |
-| `has_neurosurgeon` | BooleanField | Specialist on duty flag |
-| `has_trauma_team` | BooleanField | Specialist on duty flag |
-| `last_updated` | DateTimeField | When resources were last modified |
-
----
-
-### `HealthProfile`
-Citizen medical and emergency contact records.
-
-| Field | Type | Description |
-|---|---|---|
-| `user` | OneToOneField (User) | Linked citizen account |
-| `name` | CharField | Full name |
-| `aadhar_number` | CharField | Unique ID for lookup |
-| `age` | IntegerField | Patient age |
-| `blood_group` | CharField | Blood type |
-| `diabetes` / `heart_disease` | BooleanField | Medical condition flags |
-| `emergency_contact` | CharField | Primary emergency phone number |
-| `comments` | TextField | Additional medical notes |
-
----
-
-### `DistressSignal`
-Citizen-triggered SOS signals assigned to the nearest ambulance.
-
-| Field | Type | Description |
-|---|---|---|
-| `citizen` | ForeignKey (HealthProfile) | Citizen who sent the SOS |
-| `latitude` / `longitude` | FloatField | GPS location of the distress call |
-| `assigned_ambulance` | ForeignKey (User) | Auto-assigned nearest ambulance |
-| `emergency_phone` | CharField | Emergency contact number |
-| `created_at` | DateTimeField | Timestamp |
-
----
-
-### `PatientTransfer`
-Confirmed transfer record sent from an ambulance to a hospital.
-
-| Field | Type | Description |
-|---|---|---|
-| `hospital` | ForeignKey (Hospital) | Destination hospital |
-| `citizen` | ForeignKey (HealthProfile) | Patient profile |
-| `ambulance_user` | ForeignKey (User) | Driver making the transfer |
-| `patient_type` | CharField | Emergency category (cardiac, neuro, trauma) |
-| `eta_minutes` | FloatField | Calculated travel time |
-| `sent_time` | DateTimeField | Confirmation timestamp |
-
----
-
-## User Roles & Dashboards
-
-GoldenRoute provides 3 distinct user roles with automated role-based routing upon login:
-
-### 🚑 Ambulance Driver
-- Updates real-time GPS coordinates.
-- Selects emergency patient type (Cardiac, Neuro, Trauma).
-- Uses the **Smart Routing Algorithm** to find the highest-scoring hospital with live travel time and ETA.
-- Confirms patient transport, instantly alerting the hospital.
-- Receives auto-assigned distress SOS signals from citizens with direct Google Maps navigation links.
-
-### 🏥 Hospital
-- Manages and updates live ER room counts and ICU bed availability.
-- Toggles specialist availability on duty.
-- Views live incoming patient notifications with full medical profiles and arrival ETAs.
-
-### 👤 Citizen
-- Registers an account and maintains emergency health details (Aadhaar, blood group, medical history).
-- Triggers a GPS-based Distress Signal that auto-dispatches to the closest active ambulance.
-
----
-
-## 🗺️ How to View & Test Navigation Routes
-
-The navigation and live route features are integrated into the **Ambulance Dashboard**:
-
-### 1. Hospital Recommendation & Live Route Mapping
-1. Log in at [`/login/`](https://golden--routee.vercel.app/login/) with **`driver1`** / **`123`**.
-2. Under **Find Hospital for Patient**:
-   - **Patient Type**: Choose `Cardiac`, `Neuro`, or `Trauma`.
-   - **Accident Latitude**: `12.9715` *(Sample Chennai coordinate)*
-   - **Accident Longitude**: `80.2500`
-3. Click **🔎 Find Hospitals**.
-4. The system calculates the best-suited hospital, computes real-time driving times, and provides:
-   - 🗺️ **Embedded Google Map**: Shows the destination hospital's location.
-   - 🧭 **Open Route in Google Maps** button: Opens live, turn-by-turn Google Maps driving navigation from the accident scene to the hospital.
-
-### 2. Citizen SOS Distress Route
-1. Log in as a citizen (**`batman`** / **`123`**) and click **Send Distress Signal** with coordinates.
-2. Log into the ambulance dashboard (**`driver1`** / **`123`**).
-3. Under **🚨 Distress Signals**, click **🚑 Navigate to Citizen** to open turn-by-turn navigation directly to the citizen's exact GPS location.
-
----
-
-## Hospital Scoring Algorithm
-
-Defined in `core/utils.py → calculate_hospital_score()`:
-
-$$\text{Score} = (\text{ER rooms} \times 3) + (\text{ICU beds} \times 2) + (\text{Specialist Match} \ ? \ +20 : -20) - (\text{Travel Time in mins} \times 1.5)$$
-
-The highest-scoring hospital is recommended to the ambulance driver, balancing medical capability with travel proximity.
-
----
-
-## URL Routes
-
-| URL | View | Name | Access Scope |
-|---|---|---|---|
-| `/` | `login_view` | `home` | Public |
-| `/login/` | `login_view` | `login` | Public |
-| `/citizen-signup/` | `citizen_signup` | `citizen_signup` | Public |
-| `/citizen/` | `citizen_dashboard` | `citizen_dashboard` | Citizen Role |
-| `/edit-profile/` | `edit_health_profile` | `edit_health_profile` | Citizen Role |
-| `/distress/` | `distress_signal` | `distress_signal` | Citizen Role |
-| `/ambulance/` | `ambulance_dashboard` | `ambulance_dashboard` | Ambulance Role |
-| `/hospital/` | `hospital_dashboard` | `hospital_dashboard` | Hospital Role |
-| `/admin/` | Django Admin | — | Superuser |
-
----
-
-## How to Run Locally
-
-### 1. Clone the repository
 ```bash
+# 1. Clone repo
 git clone https://github.com/LithkeshBalajiB/goldenroute.git
 cd goldenroute
-```
 
-### 2. Create and activate virtual environment
-```bash
-# Windows
+# 2. Virtual environment
 python -m venv venv
-venv\Scripts\activate
+venv\Scripts\activate  # Windows
+# source venv/bin/activate  # macOS/Linux
 
-# macOS / Linux
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### 3. Install dependencies
-```bash
+# 3. Install dependencies
 pip install -r requirements.txt
-```
 
-### 4. Run the development server
-```bash
+# 4. Run server
 python manage.py runserver
 ```
 Visit `http://127.0.0.1:8000/` in your browser.
-
----
-
-## Vercel Deployment Guide
-
-This repository is pre-configured for 1-click deployment on Vercel:
-
-1. Push your repository to GitHub.
-2. Import the repository in [Vercel](https://vercel.com).
-3. The root `vercel.json` and `requirements.txt` will automatically build the `@vercel/python` serverless WSGI runtime.
-4. Set your production domain in **Project Settings > Domains**.
