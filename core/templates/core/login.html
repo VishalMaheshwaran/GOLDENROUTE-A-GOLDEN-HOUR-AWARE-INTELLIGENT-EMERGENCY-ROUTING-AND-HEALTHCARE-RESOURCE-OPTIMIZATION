@@ -4,6 +4,12 @@
 
 <h3>Login</h3>
 
+{% if error %}
+<div class="alert">
+    <strong>{{ error }}</strong>
+</div>
+{% endif %}
+
 <form method="POST">
 
 {% csrf_token %}

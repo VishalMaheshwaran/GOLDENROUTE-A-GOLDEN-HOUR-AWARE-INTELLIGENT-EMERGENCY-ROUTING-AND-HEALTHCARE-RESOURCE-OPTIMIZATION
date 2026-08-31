@@ -66,24 +66,35 @@ def login_view(request):
 
     if request.method == "POST":
 
-        username = request.POST["username"]
-        password = request.POST["password"]
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
 
         user = authenticate(request, username=username, password=password)
 
         if user:
             login(request, user)
 
-            role = user.userprofile.role
+            if hasattr(user, 'userprofile'):
+                role = user.userprofile.role
 
-            if role == "ambulance":
-                return redirect("ambulance_dashboard")
+                if role == "ambulance":
+                    return redirect("ambulance_dashboard")
 
-            elif role == "hospital":
-                return redirect("hospital_dashboard")
+                elif role == "hospital":
+                    return redirect("hospital_dashboard")
 
-            elif role == "citizen":
-                return redirect("citizen_dashboard")
+                elif role == "citizen":
+                    return redirect("citizen_dashboard")
+            
+            if user.is_superuser:
+                return redirect("/admin/")
+
+            return redirect("home")
+        else:
+            return render(request, "core/login.html", {
+                "error": "Invalid username or password.",
+                "last_citizen": last_citizen
+            })
 
     return render(request, "core/login.html", {
         "last_citizen": last_citizen
@@ -97,8 +108,24 @@ def citizen_signup(request):
 
     if request.method == "POST":
 
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
+        confirm_password = request.POST.get("confirm_password", "")
+
+        if not username or not password:
+            return render(request, "core/citizen_signup.html", {
+                "error": "All fields are required."
+            })
+
+        if password != confirm_password:
+            return render(request, "core/citizen_signup.html", {
+                "error": "Passwords do not match."
+            })
+
+        if User.objects.filter(username__iexact=username).exists():
+            return render(request, "core/citizen_signup.html", {
+                "error": f"The username '{username}' is already taken. Please choose another username or log in."
+            })
 
         user = User.objects.create_user(
             username=username,
